@@ -9,12 +9,13 @@ data = json.load(open("data.json"))
 
 def translate(word):
     word = word.lower()
+    closeMatch = get_close_matches(word,data.keys())
     if word in data:
         return data[word]
-    elif len(get_close_matches(word,data.keys())) > 0:
-        match = input("You mean %s instead? " % get_close_matches(word,data.keys())[0]).lower()
+    elif len(closeMatch) > 0:
+        match = input("You mean %s instead? " % closeMatch[0]).lower()
         if match == "yes":
-            return data[get_close_matches(word,data.keys())[0]]
+            return data[closeMatch[0]]
         elif match == "no":
             return "Then the word doesn't exist."
         else:
@@ -24,10 +25,12 @@ def translate(word):
 
 
 word = input("Enter the word: ").lower()
-
-
-print(translate(word))
-
+output = translate(word)
+if type(output) == list:
+    for item in output:
+        print(item)
+else:
+    print(output)
 
 
 
